@@ -1,15 +1,16 @@
-import React,{useState} from 'react'
-import {Form, Button} from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React,{useState, useContext} from 'react'
 import axios from 'axios'
-import {Link} from 'react-router-dom'
+import UserContext from '../context/userContext'
+import {useHistory} from 'react-router-dom'
+import {TextField, Card, Button, CardContent, CardActions, Typography, Link} from '@material-ui/core'
+import './register.css'
 
-
-
-const RegisterForm = (props) => {
+const RegisterForm = (e) => {
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
-  
+  const [errorMsg, setErrMsg] = useState('')
+  const history = useHistory()
+  const {setUserData} = useContext(UserContext)
   const handleSubmit = (e) =>{
     e.preventDefault()
     axios({
@@ -24,32 +25,44 @@ const RegisterForm = (props) => {
         withCredentials: true,
         url: "/users/register"
         
-    }).then((res) => 
-        console.log(res))
-      .catch(err => console.log(err))
+    }).then( async (res) => {
+        console.log(res)
+        const loginRes = await axios.post('/users/login',{
+          username: username,
+          password: password
+        })
+        setUserData({
+          token: loginRes.data.token,
+          user: loginRes.data.account
+        })
+        localStorage.setItem('auth-token',loginRes.data.token)
+        history.push('/')
+      }).catch(err => setErrMsg(err.response.data.message))
   }
 
-  return(<Form onSubmit={handleSubmit}>
-    <h2> Register</h2>
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Username</Form.Label>
-        <Form.Control type="text" placeholder="Enter username" value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-      </Form.Group>
-
-      <Form.Group controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password"  value={password}
-          onChange={e => setPassword(e.target.value)}/>
-      </Form.Group>
-      <div className='btns'>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-        <Link className='register-link' to='/login'>Login</Link>
-      </div>
-    </Form>
+  return(
+    <div className="register-container">
+      <Card className='card' elevation={5}>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <CardContent>
+            <Typography variant='h5'>Sign up</Typography>
+              <div className='card-actions'>
+                <TextField className='register-field' id="username" label="Username" 
+                    onChange= {e => setUsername(e.target.value)}
+                    error={errorMsg === "username"}
+                    helperText={errorMsg === "username" ? 'Username already exist!' : ' '}
+                    />
+                <TextField className='register-field' id="password" label="Password" 
+                    onChange= {e => setPassword(e.target.value)} type="password"
+                    />
+                  <Button className='register-btn' type="submit" variant="contained" color="primary">
+                    Submit
+                  </Button>
+                </div>
+            </CardContent>
+          </form>
+        </Card>
+    </div>
   )
 }
 

@@ -1,0 +1,25 @@
+.appbar{
+    .nav{
+        background-color: #0B3954;
+        display: flex;
+        justify-content: space-between;
+        
+        .nav-items{
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-brand{
+            color: honeydew;
+            text-decoration: none;
+            font-family: 'Secular One', sans-serif;
+        }
+    }
+    .nav-link{
+        .nav-btn{
+            color: honeydew;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+    }
+
+}

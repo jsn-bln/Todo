@@ -1,12 +1,18 @@
-import React, {useState} from 'react'
-import {Form, Button} from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import React,{useContext , useState} from 'react'
+import { useHistory } from 'react-router-dom';
 import axios from 'axios'
+import UserContext from '../context/userContext'
+import {TextField, Card, Button, CardContent, CardActions, Typography, Link} from '@material-ui/core'
+import './login.css'
 
-const LoginForm = (props) => {
-  const [username,setUsername] = useState('')
-  const [password,setPassword] = useState('')
+
+const LoginForm = ()  => {
+  
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('')
+  const history = useHistory();
+  const {setUserData} = useContext(UserContext);
 
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -23,34 +29,50 @@ const LoginForm = (props) => {
         withCredentials: true,
         url: "/users/login"
         
-    }).then((res) => 
-        console.log(res))
-      .catch(err => console.log(err))
+    }).then((res) =>
+      {
+        //! SET USER WITH CONTEXT
+        setUserData({
+          token: res.data.token,
+          user: res.data.account
+        })
+        localStorage.setItem('auth-token', res.data.token)
+        history.push('/')
+        
+      })
+      .catch((err) => {
+         console.log(err.response.data.message)
+         setErrorMsg(err.response.data.message)
+      })
   }
-    
-  
     return(
-        <Form onSubmit={handleSubmit}>
-        <h2> Login</h2>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder="Enter username" value={username}
-              onChange={e => setUsername(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password"  value={password}
-              onChange={e => setPassword(e.target.value)}/>
-          </Form.Group>
-          <div className='btns'>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-            <Link className='register-link' to='/register'>Register</Link>
-          </div>
-        </Form>
+      <div className="login-container">
+        <Card className='card' elevation={5}>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <CardContent>
+            <Typography variant='h5'>Sign in</Typography>
+              <div className='card-actions'>
+                <TextField className='login-field' id="username" label="Username" 
+                    onChange= {e => setUsername(e.target.value)}
+                    error={errorMsg === 'username'}
+                    helperText={errorMsg === "username" ? 'Username not found!' : ' '}
+                    />
+                <TextField className='login-field' id="password" label="Password" 
+                    onChange= {e => setPassword(e.target.value)} type="password"
+                    error={errorMsg === 'password'}
+                    helperText={errorMsg === "password" ? 'Password incorrect!' : ' '}
+                    />
+                    <Button className='login-btn' type="submit" variant="contained" color="primary">
+                    Submit
+                  </Button>
+                </div>
+            </CardContent>
+            <CardActions className='card-register'>
+                <Link href='/register'>Create an account</Link>
+            </CardActions>
+          </form>
+        </Card>
+      </div>
     )
     
 }
