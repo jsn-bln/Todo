@@ -1,0 +1,61 @@
+.card-actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-item-align: center;
+      align-self: center;
+  padding: 10% 0;
+}
+
+.card-actions .register-field {
+  width: 80%;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.card-actions .register-btn {
+  width: 30%;
+  margin-top: 5vh;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  background-color: #FF6663;
+}
+
+.card-actions .register-btn:hover {
+  background-color: #FF4A47;
+}
+
+.main-container .register-container {
+  font-family: 'Montserrat', sans-serif;
+  margin: auto;
+  padding: 10vh;
+  width: 30%;
+  height: 50%;
+}
+
+@media (max-width: 900px) {
+  .main-container .register-container {
+    width: 60%;
+  }
+}
+
+@media (max-width: 450px) {
+  .main-container .register-container {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  .main-container .register-container .card {
+    width: 100%;
+  }
+  .main-container .register-container .register-btn {
+    width: 80%;
+  }
+}
+/*# sourceMappingURL=register.css.map */

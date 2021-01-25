@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: url("./cover.jpg");
+  background-size: cover;
+}
+
+@media (max-width: 900px) {
+  body {
+    background: url("./cover.jpg");
+    background-size: initial;
+    background-repeat: no-repeat;
+  }
+}
+/*# sourceMappingURL=styles.css.map */
