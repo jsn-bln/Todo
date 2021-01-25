@@ -24,5 +24,13 @@ db.once('open', () => console.log('connected to Database successfully!'))
 const userRoute = require('./Routes/users')
 app.use('/users',userRoute)
 
+if (process.env.NODE_ENV === "production") {
+    // Set static folder
+    app.use(express.static("client/build"));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    });
+}
 
 app.listen(PORT, () => console.log(`server runnning on PORT:${PORT}`))
