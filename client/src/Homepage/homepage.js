@@ -1,4 +1,5 @@
-import React,{useContext, useState, useHistory} from 'react'
+import React,{useContext, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import  UserContext from '../context/userContext'
 import axios from 'axios';
 import Todo from '../todos/todo'
@@ -11,7 +12,9 @@ import {ButtonGroup, Button, TextField, Card} from '@material-ui/core'
 const Homepage = (props) =>{
     const{userData, setUserData} = useContext(UserContext)  
     const [todo, setTodo] = useState('');
+    const history = useHistory();
     const register = () => history.push('/register')
+    
     const todolist = () => {
         let todolist_items = []
         for(let i = 0; i< userData.user.task.length; i++){

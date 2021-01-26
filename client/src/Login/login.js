@@ -12,6 +12,7 @@ const LoginForm = ()  => {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('')
   const history = useHistory();
+  const register = () => history.push('/register')
   const {setUserData} = useContext(UserContext);
 
   const handleSubmit = (e) =>{
@@ -45,6 +46,8 @@ const LoginForm = ()  => {
          setErrorMsg(err.response.data.message)
       })
   }
+  
+
     return(
       <div className="login-container">
         <Card className='card' elevation={5}>
@@ -68,7 +71,7 @@ const LoginForm = ()  => {
                 </div>
             </CardContent>
             <CardActions className='card-register'>
-                <Link href='/register'>Create an account</Link>
+                <Link className="card-link" onClick={register}>Create an account</Link>
             </CardActions>
           </form>
         </Card>
