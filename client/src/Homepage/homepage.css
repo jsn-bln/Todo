@@ -13,11 +13,8 @@
 }
 
 .homepage-container .homepage-info {
-  position: absolute;
-  top: 20%;
   font-size: 1.5rem;
-  margin: 20vh;
-  padding: 0;
+  margin: 10vh;
 }
 
 .homepage-container .homepage-info .home-text-brand {
@@ -85,6 +82,7 @@
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+  height: 56px;
 }
 
 @media (max-width: 800px) {
