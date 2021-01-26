@@ -10,7 +10,6 @@ import UserData from '../context/userContext'
 
 
 const Todo = (props) => {
-    const [checked, setChecked] = useState(props.isDone)
     const {userData, setUserData} = useContext(UserData)
     const [todo, setTodo] = useState('');
     const [open, setOpen] = useState(false);
