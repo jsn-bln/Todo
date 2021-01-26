@@ -12,6 +12,7 @@ import UserData from '../context/userContext'
 const Todo = (props) => {
     const {userData, setUserData} = useContext(UserData)
     const [todo, setTodo] = useState('');
+    const [errMsg, setErrMsg] = useState('');
     const [open, setOpen] = useState(false);
     
     const handleClickOpen = () => {
@@ -72,28 +73,33 @@ const Todo = (props) => {
     }
     
     const handleEdit = () => {
-        axios({
-            method: 'PATCH',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            data: {
-                id: props.id,
-                todo: todo,
-                action: 'edittodo'
-            },
-            url: '/users/task'
-        }).then(res => {
-            setUserData({
-                token: userData.token,
-                user: {
-                    username: userData.user.username,
-                    task: res.data.task
-                }
-            })
-            console.log(userData)
-        }).catch(err => console.log(err.response.data.message))
-        handleClose()
+        if(todo.length !==0 && todo.trim() !== ''){
+            axios({
+                method: 'PATCH',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data: {
+                    id: props.id,
+                    todo: todo,
+                    action: 'edittodo'
+                },
+                url: '/users/task'
+            }).then(res => {
+                setUserData({
+                    token: userData.token,
+                    user: {
+                        username: userData.user.username,
+                        task: res.data.task
+                    }
+                })
+                console.log(userData)
+            }).catch(err => console.log(err.response.data.message))
+            handleClose()
+            setErrMsg('')
+        }else{
+            setErrMsg('Empty fields!')
+        }
     }
     
     return(
@@ -125,6 +131,8 @@ const Todo = (props) => {
             type="text"
             fullWidth
             onChange={e => setTodo(e.target.value)}
+            error={errMsg !== ''}
+            helperText={errMsg !== ''? errMsg: ''}
           />
         </DialogContent>
         <DialogActions>
