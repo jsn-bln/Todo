@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useState, useHistory} from 'react'
 import  UserContext from '../context/userContext'
 import axios from 'axios';
 import Todo from '../todos/todo'
@@ -11,7 +11,7 @@ import {ButtonGroup, Button, TextField, Card} from '@material-ui/core'
 const Homepage = (props) =>{
     const{userData, setUserData} = useContext(UserContext)  
     const [todo, setTodo] = useState('');
-  
+    const register = () => history.push('/register')
     const todolist = () => {
         let todolist_items = []
         for(let i = 0; i< userData.user.task.length; i++){
@@ -88,7 +88,7 @@ const Homepage = (props) =>{
             <div className="homepage-info">
                 <h1 className="home-text-brand"><strong className="brand">Todododo List!</strong></h1>
                 <h2 className="home-text-info">Manage your task easily</h2>
-                <Button className="cta-btn" href='/register'> Register now for free</Button>
+                <Button className="cta-btn" onClick={register}> Register now for free</Button>
             </div>
             }
         </div>
