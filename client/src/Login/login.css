@@ -39,6 +39,10 @@
           justify-content: center;
 }
 
+.card-register .card-link {
+  cursor: pointer;
+}
+
 .main-container .login-container {
   font-family: 'Montserrat', sans-serif;
   margin: auto;
