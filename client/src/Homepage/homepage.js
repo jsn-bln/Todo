@@ -12,6 +12,7 @@ import {ButtonGroup, Button, TextField, Card} from '@material-ui/core'
 const Homepage = (props) =>{
     const{userData, setUserData} = useContext(UserContext)  
     const [todo, setTodo] = useState('');
+    const [errMsg, setErrMsg] = useState('');
     const history = useHistory();
     const register = () => history.push('/register')
     
@@ -33,43 +34,48 @@ const Homepage = (props) =>{
 
     
     const addTask = () => {
-        if(todo === "") return console.log("error")
-        axios({
-            method: 'PATCH',
-            headers:{
-            'Content-Type': 'application/json'
-            },
-            data: {
-                username: userData.user.username,
-                todo: todo,
-                action: 'addtask'
-            },
-            withCredentials: true,
-            url: "/users/task"
-        }).then( res => {
+        if(todo.length !==0 && todo.trim() !== ''){
             axios({
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+                method: 'PATCH',
+                headers:{
+                'Content-Type': 'application/json'
                 },
                 data: {
-                    username: res.data.username
+                    username: userData.user.username,
+                    todo: todo,
+                    action: 'addtask'
                 },
-                url: "/users"
-            }).then(res => {
-                setUserData({
-                    token: userData.token,
-                    user:{
-                        username: userData.user.username,
-                        task: res.data.task
-                    }
-                })
-                
-            }).catch(err => console.log(err.response.data))
-        })
-        .catch(err => console.log(err))
-        
+                withCredentials: true,
+                url: "/users/task"
+            }).then( res => {
+                axios({
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        username: res.data.username
+                    },
+                    url: "/users"
+                }).then(res => {
+                    setUserData({
+                        token: userData.token,
+                        user:{
+                            username: userData.user.username,
+                            task: res.data.task
+                        }
+                    })
+                    
+                }).catch(err => console.log(err.response.data))
+            })
+            .catch(err => console.log(err))
+            setErrMsg('')
+            setTodo('')
+        }else{
+            setErrMsg('Empty field!')
+        }    
     }
+
     
     
     return(
@@ -79,7 +85,12 @@ const Homepage = (props) =>{
                 <div className="homepage-sub">
                     <h1>{userData.user.username}'s list of tasks</h1>
                     <ButtonGroup className='addtask-group'>
-                        <TextField onChange={e => setTodo(e.target.value)} className='add-textfield' label="Add Task" />
+                        <TextField onChange={e => setTodo(e.target.value)} className='add-textfield' 
+                        value={todo}
+                        label="Add Task" 
+                        error={errMsg.length !== 0}
+                        helperText={errMsg.length !==0? errMsg: ''}
+                        />
                         <Button onClick={addTask} className='add-btn'>Add</Button>
                     </ButtonGroup>
                 <div className="todo-container">
